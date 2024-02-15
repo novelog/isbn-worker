@@ -1,8 +1,3 @@
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Microsoft.Extensions.Logging;
-
 namespace Isbn.Providers.Helpers;
 
 public static class IsbnCalculator
@@ -21,14 +16,11 @@ public static class IsbnCalculator
 
     public static string GenerateIsbn10(string nineDigits)
     {
-        Console.WriteLine($"digits: {nineDigits}");
         var sumFirst9 = 0;
         for (var i = 0; i < nineDigits.Length; i++)
         {
             sumFirst9 += int.Parse(nineDigits[i].ToString()) * (10 - i);
         }
-        Console.WriteLine($"9digitSum: {sumFirst9}");
-
 
         var checkDigit = 0;
         while (true)

@@ -16,6 +16,6 @@ public class FakeService : IIsbnService
             .RuleFor(i => i.Isbn10, f =>
                 IsbnCalculator.GenerateIsbn10(f.Random.ReplaceNumbers("#########")))
             .RuleFor(i => i.Isbn13, (f, i) => i.Isbn10.AsIsbn13())
-            .GenerateBetween(5, 10);
+            .GenerateBetween(3, 5);
     }
 }

@@ -1,6 +1,12 @@
 using Coravel;
+using Grpc.Net.Client;
+
+
+using Isbn.Console.Services;
+using Isbn.Console.Transports;
 using Isbn.Console.Workers;
 using Isbn.Providers;
+using Novelog.BookService.Api;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +18,9 @@ builder.Services.AddProviders()
     .AddScheduler()
     .AddHealthChecks();
 
-builder.Services.AddTransient<FakeTask>();
+builder.Services.AddTransient<FakeTask>()
+    .AddSingleton(_ => new GrpcTransport(new GrpcChannelOptions()))
+    .AddSingleton<IBookService, BookService>();
 
 var app = builder.Build();
 app.UseHealthChecks("/_health");
@@ -20,7 +28,7 @@ app.UseHealthChecks("/_health");
 app.Services.UseScheduler(scheduler =>
 {
     scheduler.Schedule<FakeTask>()
-        .EverySeconds(30)
+        .EverySeconds(10)
         .PreventOverlapping(nameof(FakeTask))
         .RunOnceAtStart();
 });

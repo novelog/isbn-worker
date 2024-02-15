@@ -1,0 +1,18 @@
+syntax = "proto3";
+option csharp_namespace="Novelog.BookService.Api";
+package Novelog.BookService.Api;
+
+message CreateBookRequest{
+    string Title = 1;
+}
+
+message CreateBookResponse{
+    string Id = 1;
+}
+
+service BookServiceDefinition{
+    rpc CreateBookUnary(CreateBookRequest) returns (CreateBookResponse);
+    rpc CreateBookClientStream(stream CreateBookRequest) returns (CreateBookResponse);
+    rpc CreateBookServerStream(CreateBookRequest) returns (stream CreateBookResponse);
+    rpc CreateBookBidirectionalStream(stream CreateBookRequest) returns (stream CreateBookResponse);
+}
