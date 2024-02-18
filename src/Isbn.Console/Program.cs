@@ -1,12 +1,9 @@
 using Coravel;
 using Grpc.Net.Client;
-
-
 using Isbn.Console.Services;
 using Isbn.Console.Transports;
 using Isbn.Console.Workers;
 using Isbn.Providers;
-using Novelog.BookService.Api;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

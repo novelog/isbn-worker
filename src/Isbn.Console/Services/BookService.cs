@@ -18,12 +18,30 @@ public class BookService : IBookService
     public void CreateBook(CreateBookRequest req)
     {
         var client = new BookServiceDefinition.BookServiceDefinitionClient(_transport.Channel);
-        UnaryTest(client, req);
+        Unary(client, req);
+    }
+    public async void CreateBooks(IEnumerable<CreateBookRequest> req)
+    {
+        var client = new BookServiceDefinition.BookServiceDefinitionClient(_transport.Channel);
+
+        await ClientStreaming(client, req);
     }
 
-    private void UnaryTest(BookServiceDefinition.BookServiceDefinitionClient client, CreateBookRequest req)
+    private void Unary(BookServiceDefinition.BookServiceDefinitionClient client, CreateBookRequest req)
     {
-        var resp = client.CreateBookUnary(req);
+        var resp = client.CreateBook(req);
         _logger.LogInformation("grpc server createbookrequest response: {@Response}", resp);
+    }
+    private async Task ClientStreaming(BookServiceDefinition.BookServiceDefinitionClient client, IEnumerable<CreateBookRequest> books)
+    {
+        using var call = client.CreateBooks();
+        foreach (var book in books)
+        {
+            await call.RequestStream.WriteAsync(book);
+        }
+        await call.RequestStream.CompleteAsync();
+
+        var resp = await call;
+        _logger.LogInformation("book-service response: {@Response}", resp);
     }
 }

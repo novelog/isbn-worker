@@ -10,9 +10,11 @@ message CreateBookResponse{
     string Id = 1;
 }
 
+message CreateBooksResponse{
+    int32 TotalAdded = 1;
+}
+
 service BookServiceDefinition{
-    rpc CreateBookUnary(CreateBookRequest) returns (CreateBookResponse);
-    rpc CreateBookClientStream(stream CreateBookRequest) returns (CreateBookResponse);
-    rpc CreateBookServerStream(CreateBookRequest) returns (stream CreateBookResponse);
-    rpc CreateBookBidirectionalStream(stream CreateBookRequest) returns (stream CreateBookResponse);
+    rpc CreateBook(CreateBookRequest) returns (CreateBookResponse);
+    rpc CreateBooks(stream CreateBookRequest) returns (CreateBooksResponse);
 }
